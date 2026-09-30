@@ -1,0 +1,71 @@
+/* ==========================================================================
+   RESPONSIVE DESIGN SCALING FOR TABLETS & LAPTOPS
+   ========================================================================== */
+
+@media (max-width: 1400px) {
+  .cluster-main-grid {
+    grid-template-columns: 300px 1fr 300px;
+    gap: 12px;
+  }
+
+  .gauge-svg-container {
+    width: 210px;
+    height: 190px;
+  }
+
+  .gauge-value {
+    font-size: 34px;
+  }
+
+  .emergency-snapshot-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 1080px) {
+  .cluster-main-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .cluster-col-center {
+    grid-column: span 2;
+    order: -1;
+  }
+
+  .temp-cards-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .project-info-bar {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+}
+
+@media (max-width: 768px) {
+  .app-container {
+    padding: 10px;
+  }
+
+  .dashboard-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .cluster-main-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cluster-col-center {
+    grid-column: span 1;
+  }
+
+  .emergency-snapshot-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .ip-form {
+    flex-direction: column;
+  }
+}

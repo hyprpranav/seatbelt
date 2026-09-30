@@ -1,0 +1,102 @@
+/* ==========================================================================
+   GLOBAL STYLES & AUTOMOTIVE COCKPIT DESIGN TOKENS
+   ========================================================================== */
+
+:root {
+  /* Color Palette */
+  --bg-dark-void: #06090e;
+  --bg-cockpit-panel: #0d131f;
+  --bg-panel-glass: rgba(13, 19, 31, 0.75);
+  --bg-card-dark: #121a29;
+  
+  --border-metallic: rgba(60, 80, 115, 0.4);
+  --border-cyan-glow: rgba(0, 243, 255, 0.3);
+  --border-red-glow: rgba(255, 42, 75, 0.5);
+
+  --accent-cyan: #00f3ff;
+  --accent-emerald: #00ff88;
+  --accent-warning: #ffaa00;
+  --accent-red: #ff2a4b;
+  --accent-blue: #0088ff;
+
+  --text-primary: #f0f4fc;
+  --text-secondary: #8c9ebc;
+  --text-muted: #536480;
+
+  /* Typography */
+  --font-main: 'Rajdhani', sans-serif;
+  --font-digits: 'Share Tech Mono', monospace;
+
+  /* Shadows & Glows */
+  --glow-cyan: 0 0 15px rgba(0, 243, 255, 0.4);
+  --glow-emerald: 0 0 15px rgba(0, 255, 136, 0.4);
+  --glow-warning: 0 0 15px rgba(255, 170, 0, 0.4);
+  --glow-red: 0 0 20px rgba(255, 42, 75, 0.6);
+}
+
+/* Box Sizing Reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-dark-void);
+  color: var(--text-primary);
+  font-family: var(--font-main);
+  min-height: 100vh;
+  overflow-x: hidden;
+  line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Button & Input resets */
+button {
+  font-family: var(--font-main);
+  cursor: pointer;
+  border: none;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+input {
+  font-family: var(--font-digits);
+  outline: none;
+}
+
+/* Utility Animations */
+@keyframes pulseGlowRed {
+  0% { box-shadow: 0 0 10px rgba(255, 42, 75, 0.4); }
+  50% { box-shadow: 0 0 30px rgba(255, 42, 75, 0.9); }
+  100% { box-shadow: 0 0 10px rgba(255, 42, 75, 0.4); }
+}
+
+@keyframes pulseGlowAmber {
+  0% { box-shadow: 0 0 10px rgba(255, 170, 0, 0.4); }
+  50% { box-shadow: 0 0 25px rgba(255, 170, 0, 0.8); }
+  100% { box-shadow: 0 0 10px rgba(255, 170, 0, 0.4); }
+}
+
+@keyframes blinkSlow {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.35; transform: scale(0.98); }
+}
+
+@keyframes blinkFast {
+  0%, 100% { opacity: 1; background-color: rgba(255, 42, 75, 0.35); box-shadow: 0 0 25px rgba(255, 42, 75, 0.9); }
+  50% { opacity: 0.2; background-color: rgba(255, 170, 0, 0.1); box-shadow: none; }
+}
+
+.blink-slow {
+  animation: blinkSlow 1s infinite ease-in-out;
+}
+
+.blink-fast {
+  animation: blinkFast 0.25s infinite ease-in-out !important;
+}
+
+@keyframes scanline {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(1000%); }
+}

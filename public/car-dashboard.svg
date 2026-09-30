@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" width="100%" height="100%">
+  <defs>
+    <!-- Background Radial Gradient -->
+    <radialGradient id="bg-glow" cx="50%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#141c2e" stop-opacity="0.8"/>
+      <stop offset="60%" stop-color="#080c14" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#030508" stop-opacity="1"/>
+    </radialGradient>
+
+    <!-- Carbon Fiber Hex Pattern -->
+    <pattern id="carbon-grid" width="20" height="20" patternUnits="userSpaceOnUse">
+      <rect width="20" height="20" fill="#060910" />
+      <path d="M 0,10 L 10,0 L 20,10 L 10,20 Z" fill="#0b101c" opacity="0.3" />
+      <circle cx="10" cy="10" r="1" fill="#00f3ff" opacity="0.08" />
+    </pattern>
+
+    <!-- Metallic Bezel Gradients -->
+    <linearGradient id="bezel-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2a384e" stop-opacity="0.5"/>
+      <stop offset="50%" stop-color="#111723" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#070a10" stop-opacity="0.9"/>
+    </linearGradient>
+
+    <linearGradient id="cyan-glow-line" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00f3ff" stop-opacity="0"/>
+      <stop offset="50%" stop-color="#00f3ff" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#00f3ff" stop-opacity="0"/>
+    </linearGradient>
+
+    <linearGradient id="red-glow-line" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ff2a4b" stop-opacity="0"/>
+      <stop offset="50%" stop-color="#ff2a4b" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#ff2a4b" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Deep Cockpit Canvas Base -->
+  <rect width="1920" height="1080" fill="url(#bg-glow)" />
+  <rect width="1920" height="1080" fill="url(#carbon-grid)" />
+
+  <!-- Instrument Cluster Bezel Geometry -->
+  <g opacity="0.4">
+    <!-- Top Cockpit Curved Arc -->
+    <path d="M 150,80 Q 960,-20 1770,80 L 1820,160 L 100,160 Z" fill="url(#bezel-grad)" stroke="#00f3ff" stroke-width="1" opacity="0.2" />
+    <path d="M 200,90 Q 960,0 1720,90" fill="none" stroke="url(#cyan-glow-line)" stroke-width="2" />
+
+    <!-- Left Gauge Circle Framing -->
+    <circle cx="420" cy="500" r="320" fill="none" stroke="#1b263b" stroke-width="2" stroke-dasharray="8,6" />
+    <circle cx="420" cy="500" r="340" fill="none" stroke="#00f3ff" stroke-width="1" opacity="0.15" />
+
+    <!-- Right Gauge Circle Framing -->
+    <circle cx="1500" cy="500" r="320" fill="none" stroke="#1b263b" stroke-width="2" stroke-dasharray="8,6" />
+    <circle cx="1500" cy="500" r="340" fill="none" stroke="#00f3ff" stroke-width="1" opacity="0.15" />
+
+    <!-- Center Console Frame -->
+    <path d="M 760,180 L 1160,180 L 1220,860 L 700,860 Z" fill="none" stroke="#24334a" stroke-width="1.5" />
+    <path d="M 700,860 Q 960,940 1220,860" fill="none" stroke="url(#cyan-glow-line)" stroke-width="2" />
+  </g>
+
+  <!-- Tech Corner Accent Crosshairs -->
+  <g stroke="#00f3ff" stroke-width="1" opacity="0.3">
+    <path d="M 40,40 L 100,40 M 40,40 L 40,100" />
+    <path d="M 1880,40 L 1820,40 M 1880,40 L 1880,100" />
+    <path d="M 40,1040 L 100,1040 M 40,1040 L 40,980" />
+    <path d="M 1880,1040 L 1820,1040 M 1880,1040 L 1880,980" />
+  </g>
+</svg>
