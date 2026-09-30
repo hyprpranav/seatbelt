@@ -1,0 +1,200 @@
+/* Landing Page Styles */
+
+.landing-root {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: #000;
+  font-family: 'Inter', system-ui, sans-serif;
+  color: #fff;
+}
+
+.landing-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('/car-bg.jpg'); /* Placed in public dir */
+  background-size: cover;
+  background-position: center bottom;
+  background-repeat: no-repeat;
+  z-index: 1;
+  animation: subtleZoom 20s infinite alternate linear;
+}
+
+.landing-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    135deg, 
+    rgba(0,0,0,0.85) 0%, 
+    rgba(0,0,0,0.4) 50%, 
+    rgba(0,0,0,0.85) 100%
+  );
+  z-index: 2;
+}
+
+.landing-content {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  padding: 2rem;
+  text-align: center;
+}
+
+.landing-brand {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  animation: fadeDown 1s ease-out forwards;
+}
+
+.landing-icon {
+  font-size: 4rem;
+  filter: drop-shadow(0 0 15px rgba(59, 130, 246, 0.5));
+}
+
+.landing-brand div {
+  text-align: left;
+}
+
+.landing-title {
+  margin: 0;
+  font-size: 4rem;
+  font-weight: 900;
+  letter-spacing: 2px;
+  background: linear-gradient(to right, #fff, #94a3b8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1.1;
+}
+
+.landing-subtitle {
+  margin: 0.5rem 0 0;
+  font-size: 1.2rem;
+  color: #cbd5e1;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.landing-tagline {
+  font-size: 1.5rem;
+  color: #94a3b8;
+  line-height: 1.6;
+  max-width: 600px;
+  margin-bottom: 4rem;
+  animation: fadeUp 1s ease-out 0.3s forwards;
+  opacity: 0;
+}
+
+.landing-actions {
+  display: flex;
+  gap: 1.5rem;
+  animation: fadeUp 1s ease-out 0.6s forwards;
+  opacity: 0;
+}
+
+.btn-landing {
+  padding: 1rem 2.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.btn-signin {
+  background: #fff;
+  color: #000;
+  border: 2px solid #fff;
+}
+
+.btn-signin:hover {
+  background: transparent;
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+}
+
+.btn-signup {
+  background: transparent;
+  color: #fff;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(5px);
+}
+
+.btn-signup:hover {
+  border-color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+}
+
+.landing-note {
+  position: absolute;
+  bottom: 2rem;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.4);
+  letter-spacing: 1px;
+}
+
+.landing-bottom-fade {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 200px;
+  background: linear-gradient(to top, rgba(0,0,0,1) 0%, transparent 100%);
+  z-index: 3;
+}
+
+@keyframes fadeDown {
+  0% { opacity: 0; transform: translateY(-30px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeUp {
+  0% { opacity: 0; transform: translateY(30px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes subtleZoom {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.05); }
+}
+
+@media (max-width: 768px) {
+  .landing-brand {
+    flex-direction: column;
+    text-align: center;
+  }
+  .landing-brand div {
+    text-align: center;
+  }
+  .landing-title {
+    font-size: 2.5rem;
+  }
+  .landing-subtitle {
+    font-size: 0.9rem;
+  }
+  .landing-tagline {
+    font-size: 1.1rem;
+  }
+  .landing-actions {
+    flex-direction: column;
+    width: 100%;
+    max-width: 300px;
+  }
+}
