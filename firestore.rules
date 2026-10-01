@@ -19,6 +19,16 @@ service cloud.firestore {
       
       // 4. Deletions are completely blocked for security tracking
       allow delete: if false;
+      
+      // --- NEW RULES FOR SENSOR HISTORY ---
+      match /history/{historyId} {
+        // A user can save their own sensor data.
+        allow create: if request.auth != null && request.auth.uid == userId;
+        // A user can view their own data, and Admins can view ANY user's data.
+        allow read: if request.auth != null && (request.auth.uid == userId || isAdmin());
+        // Once saved, historical data cannot be tampered with or deleted.
+        allow update, delete: if false;
+      }
     }
   }
 }
