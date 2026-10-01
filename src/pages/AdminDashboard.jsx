@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
-import { collection, query, where, getDocs, doc, updateDoc, serverTimestamp, orderBy } from 'firebase/firestore';
+import { collection, query, where, getDocs, doc, updateDoc, serverTimestamp, orderBy, limit } from 'firebase/firestore';
 import { db } from '../firebase/config';
 
 // Reuse all existing dashboard components
@@ -81,6 +81,11 @@ export default function AdminDashboard() {
   const serialPortRef  = React.useRef(null);
   const serialStopRef  = React.useRef(null);
 
+  // History Modal State
+  const [viewingUser, setViewingUser] = useState(null);
+  const [userHistory, setUserHistory] = useState([]);
+  const [loadingHistory, setLoadingHistory] = useState(false);
+
   // ── Load Firestore Users ────────────────────────────────
   async function loadUsers() {
     setLoadingUsers(true);
@@ -134,6 +139,24 @@ export default function AdminDashboard() {
     } catch (err) {
       console.error('Reject failed:', err);
     }
+  }
+
+  // ── View User History ───────────────────────────────────
+  async function viewUserHistory(user) {
+    setViewingUser(user);
+    setLoadingHistory(true);
+    setUserHistory([]);
+    try {
+      const historyRef = collection(db, 'users', user.id, 'history');
+      const q = query(historyRef, orderBy('savedAt', 'desc'), limit(50));
+      const snap = await getDocs(q);
+      const data = [];
+      snap.forEach(d => data.push({ id: d.id, ...d.data() }));
+      setUserHistory(data);
+    } catch (err) {
+      console.error('Failed to load user history', err);
+    }
+    setLoadingHistory(false);
   }
 
   // ── Serial connect ──────────────────────────────────────
@@ -399,7 +422,14 @@ export default function AdminDashboard() {
                             ? u.approvedAt.toDate().toLocaleString('en-IN')
                             : '—'}
                         </td>
-                        <td>
+                        <td className="admin-actions">
+                          <button
+                            className="admin-btn admin-btn--approve"
+                            onClick={() => viewUserHistory(u)}
+                            style={{ marginRight: '8px' }}
+                          >
+                            View Data
+                          </button>
                           <button
                             className="admin-btn admin-btn--reject"
                             onClick={() => rejectUser(u.id)}
@@ -446,8 +476,59 @@ export default function AdminDashboard() {
             </div>
           </div>
         )}
-
       </main>
+
+      {/* ─── HISTORY MODAL ─── */}
+      {viewingUser && (
+        <div className="admin-modal-overlay" onClick={() => setViewingUser(null)}>
+          <div className="admin-modal-content" onClick={e => e.stopPropagation()}>
+            <div className="admin-modal-header">
+              <h2>📊 {viewingUser.name}'s History</h2>
+              <button className="admin-modal-close" onClick={() => setViewingUser(null)}>✖</button>
+            </div>
+            <div className="admin-modal-body">
+              {loadingHistory ? (
+                <p>Loading history...</p>
+              ) : userHistory.length === 0 ? (
+                <p>No sensor data recorded for this user yet.</p>
+              ) : (
+                <table className="admin-table">
+                  <thead>
+                    <tr>
+                      <th>Time</th>
+                      <th>Heart Rate</th>
+                      <th>SpO2</th>
+                      <th>Body Temp</th>
+                      <th>Seatbelt</th>
+                      <th>Engine</th>
+                      <th>Emergency</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {userHistory.map(h => (
+                      <tr key={h.id}>
+                        <td>{h.savedAt?.toDate ? h.savedAt.toDate().toLocaleTimeString('en-IN') : '—'}</td>
+                        <td>{h.heartRate} BPM</td>
+                        <td>{h.spo2}%</td>
+                        <td>{h.bodyTemp}°C</td>
+                        <td style={{ color: h.seatbelt ? 'var(--success-green)' : 'var(--danger-red)' }}>
+                          {h.seatbelt ? 'FASTENED' : 'UNFASTENED'}
+                        </td>
+                        <td style={{ color: h.engine ? 'var(--success-green)' : 'var(--danger-red)' }}>
+                          {h.engine ? 'ON' : 'OFF'}
+                        </td>
+                        <td style={{ color: h.emergency ? 'var(--danger-red)' : 'var(--success-green)' }}>
+                          {h.emergency ? 'YES' : 'NO'}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

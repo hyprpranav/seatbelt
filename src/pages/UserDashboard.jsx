@@ -28,6 +28,9 @@ import {
   controlESP32Seatbelt
 } from '../utils/api';
 
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { db } from '../firebase/config';
+
 import {
   requestSerialPort,
   openSerialPort,
@@ -71,8 +74,15 @@ export default function UserDashboard() {
     pulseDetected: true,
     buzzer: "OFF",
     emergency: false,
+    emergency: false,
     timestamp: Date.now()
   });
+
+  // Track latest sensor data in a ref so intervals can read it without re-triggering
+  const sensorDataRef = useRef(sensorData);
+  useEffect(() => {
+    sensorDataRef.current = sensorData;
+  }, [sensorData]);
 
   // Seat-Belt Countdown & Buzzer State
   const [countdown, setCountdown] = useState(30);
@@ -102,6 +112,26 @@ export default function UserDashboard() {
     }, 1000);
     return () => clearInterval(clockTimer);
   }, []);
+
+  // ── FIREBASE HISTORY SYNC ───────────────────────────────────────────────
+  // Saves the current sensor data to the user's history subcollection every 5 seconds
+  useEffect(() => {
+    const syncInterval = setInterval(async () => {
+      if (!userProfile?.id || (connectionStatus !== 'CONNECTED' && !isDemoMode)) return;
+
+      try {
+        const historyRef = collection(db, 'users', userProfile.id, 'history');
+        await addDoc(historyRef, {
+          ...sensorDataRef.current,
+          savedAt: serverTimestamp()
+        });
+      } catch (err) {
+        console.error('Failed to sync history:', err);
+      }
+    }, 5000);
+
+    return () => clearInterval(syncInterval);
+  }, [userProfile?.id, connectionStatus, isDemoMode]);
 
   // ── SERIAL PORT CONNECTION ──────────────────────────────────────────────────
   // Opens the browser's native COM port picker, opens the port at 115200 baud,
