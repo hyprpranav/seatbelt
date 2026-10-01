@@ -4,7 +4,7 @@ import { getHeartRateStatus } from '../utils/calculations';
 /**
  * Heart-Rate & Secondary Pulse Sensor Circular Gauge Module
  */
-export default function PulseGauge({ heartRate, pulseDetected }) {
+export default function PulseGauge({ heartRate, pulseDetected, pulseValue }) {
   const hr = heartRate !== null && heartRate !== undefined ? heartRate : 0;
   const status = getHeartRateStatus(heartRate);
 
@@ -122,9 +122,9 @@ export default function PulseGauge({ heartRate, pulseDetected }) {
           </span>
         </div>
         <div className="signal-row">
-          <span className="sig-label">SECONDARY PULSE:</span>
-          <span className="sig-val sig-detected">
-            {pulseDetected ? 'DETECTED' : 'SEARCHING'}
+          <span className="sig-label">RAW PULSE VALUE:</span>
+          <span className="sig-val" style={{ fontSize: '24px', fontWeight: 'bold', color: pulseDetected ? '#00f3ff' : '#546a94' }}>
+            {pulseValue || 0}
           </span>
         </div>
       </div>

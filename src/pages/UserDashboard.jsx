@@ -424,6 +424,7 @@ export default function UserDashboard() {
             <PulseGauge
               heartRate={sensorData.heartRate}
               pulseDetected={sensorData.pulseDetected}
+              pulseValue={sensorData.pulseValue}
             />
           </div>
 

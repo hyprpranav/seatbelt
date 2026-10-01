@@ -310,6 +310,7 @@
       : "\"environmentTemp\":null,";
 
     json += "\"pulseDetected\":"  + String(pulseDetected ? "true" : "false") + ",";
+    json += "\"pulseValue\":"     + String(analogPulseVal) + ",";
     json += "\"buzzer\":\""       + buzzerState + "\",";
     json += "\"emergency\":"      + String(emergencyActive ? "true" : "false") + ",";
     json += "\"timestamp\":"      + String(millis());

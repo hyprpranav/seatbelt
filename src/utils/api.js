@@ -200,6 +200,7 @@ export function sanitizeSensorData(raw) {
     bodyTemp: sanitizeNumber(raw.bodyTemp),
     environmentTemp: sanitizeNumber(raw.environmentTemp),
     pulseDetected: Boolean(raw.pulseDetected),
+    pulseValue: raw.pulseValue !== undefined ? Number(raw.pulseValue) : 0,
     buzzer: String(raw.buzzer || "OFF").toUpperCase(),
     emergency: Boolean(raw.emergency),
     timestamp: raw.timestamp || Date.now()
@@ -256,6 +257,7 @@ export function generateDemoSensorData(previousData = {}, countdownState = 30) {
     bodyTemp: newBodyTemp,
     environmentTemp: newEnvTemp,
     pulseDetected: true,
+    pulseValue: Math.round(2000 + (Math.random() * 500 - 250)), // Mock raw analog value
     buzzer: buzzerState,
     emergency: previousData.emergency || false,
     timestamp: now
