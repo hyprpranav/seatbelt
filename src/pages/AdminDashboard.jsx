@@ -2,11 +2,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
-// =====================================================================
-// ⚠️ TEMPORARY LOCAL STORAGE LOGIC (DEMO MODE) ⚠️
-// TODO: WHEN READY FOR FIREBASE, THIS FILE WILL BE UPDATED TO USE
-// REAL FIRESTORE METHODS.
-// =====================================================================
+import { collection, query, where, getDocs, doc, updateDoc, serverTimestamp, orderBy } from 'firebase/firestore';
+import { db } from '../firebase/config';
 
 // Reuse all existing dashboard components
 import ConnectionPanel from '../components/ConnectionPanel';
@@ -84,17 +81,22 @@ export default function AdminDashboard() {
   const serialPortRef  = React.useRef(null);
   const serialStopRef  = React.useRef(null);
 
-  // ── Load Local Users ────────────────────────────────
+  // ── Load Firestore Users ────────────────────────────────
   async function loadUsers() {
     setLoadingUsers(true);
     try {
-      const users = JSON.parse(localStorage.getItem('demo_users') || '[]');
-      
+      const usersRef = collection(db, 'users');
       // Sort by requestedAt descending
-      users.sort((a, b) => new Date(b.requestedAt) - new Date(a.requestedAt));
+      const q = query(usersRef, orderBy('requestedAt', 'desc'));
+      const snapshot = await getDocs(q);
 
-      setPendingUsers(users.filter(u => u.status === 'pending'));
-      setApprovedUsers(users.filter(u => u.status === 'approved' && u.role !== 'admin'));
+      const allUsers = [];
+      snapshot.forEach(doc => {
+        allUsers.push({ id: doc.id, ...doc.data() });
+      });
+
+      setPendingUsers(allUsers.filter(u => u.status === 'pending'));
+      setApprovedUsers(allUsers.filter(u => u.status === 'approved' && u.role !== 'admin'));
     } catch (err) {
       console.error('Failed to load users:', err);
     }
@@ -109,25 +111,29 @@ export default function AdminDashboard() {
 
   // ── Approve user ────────────────────────────────────────
   async function approveUser(uid) {
-    let users = JSON.parse(localStorage.getItem('demo_users') || '[]');
-    let userIndex = users.findIndex(u => u.id === uid);
-    if (userIndex !== -1) {
-      users[userIndex].status = 'approved';
-      users[userIndex].approvedAt = new Date().toISOString();
-      localStorage.setItem('demo_users', JSON.stringify(users));
+    try {
+      const userRef = doc(db, 'users', uid);
+      await updateDoc(userRef, {
+        status: 'approved',
+        approvedAt: serverTimestamp(),
+      });
+      loadUsers();
+    } catch (err) {
+      console.error('Approve failed:', err);
     }
-    loadUsers();
   }
 
   // ── Reject user ─────────────────────────────────────────
   async function rejectUser(uid) {
-    let users = JSON.parse(localStorage.getItem('demo_users') || '[]');
-    let userIndex = users.findIndex(u => u.id === uid);
-    if (userIndex !== -1) {
-      users[userIndex].status = 'rejected';
-      localStorage.setItem('demo_users', JSON.stringify(users));
+    try {
+      const userRef = doc(db, 'users', uid);
+      await updateDoc(userRef, {
+        status: 'rejected',
+      });
+      loadUsers();
+    } catch (err) {
+      console.error('Reject failed:', err);
     }
-    loadUsers();
   }
 
   // ── Serial connect ──────────────────────────────────────
@@ -324,8 +330,8 @@ export default function AdminDashboard() {
                         <td>{u.name}</td>
                         <td>{u.email}</td>
                         <td>
-                          {u.requestedAt
-                            ? new Date(u.requestedAt).toLocaleString('en-IN')
+                          {u.requestedAt?.toDate
+                            ? u.requestedAt.toDate().toLocaleString('en-IN')
                             : '—'}
                         </td>
                         <td className="admin-actions">
@@ -384,13 +390,13 @@ export default function AdminDashboard() {
                         <td>{u.name}</td>
                         <td>{u.email}</td>
                         <td>
-                          {u.requestedAt
-                            ? new Date(u.requestedAt).toLocaleString('en-IN')
+                          {u.requestedAt?.toDate
+                            ? u.requestedAt.toDate().toLocaleString('en-IN')
                             : '—'}
                         </td>
                         <td>
-                          {u.approvedAt
-                            ? new Date(u.approvedAt).toLocaleString('en-IN')
+                          {u.approvedAt?.toDate
+                            ? u.approvedAt.toDate().toLocaleString('en-IN')
                             : '—'}
                         </td>
                         <td>

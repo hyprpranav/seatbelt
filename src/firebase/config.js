@@ -15,12 +15,12 @@ import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
-  apiKey: "REPLACE_WITH_YOUR_API_KEY",
-  authDomain: "REPLACE_WITH_YOUR_AUTH_DOMAIN",
-  projectId: "REPLACE_WITH_YOUR_PROJECT_ID",
-  storageBucket: "REPLACE_WITH_YOUR_STORAGE_BUCKET",
-  messagingSenderId: "REPLACE_WITH_YOUR_MESSAGING_SENDER_ID",
-  appId: "REPLACE_WITH_YOUR_APP_ID"
+  apiKey: "AIzaSyDv73I9ua_SjlrOFl5J0YJ7JFotqw_uJRE",
+  authDomain: "beltiva-c3abd.firebaseapp.com",
+  projectId: "beltiva-c3abd",
+  storageBucket: "beltiva-c3abd.firebasestorage.app",
+  messagingSenderId: "660319146889",
+  appId: "1:660319146889:web:49ea1680881097d37f4758"
 };
 
 const app = initializeApp(firebaseConfig);
