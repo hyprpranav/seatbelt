@@ -65,14 +65,17 @@ export function AuthProvider({ children }) {
   async function fetchProfile(uid) {
     if (!uid) {
       setUserProfile(null);
-      return;
+      return null;
     }
     const docRef = doc(db, 'users', uid);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
-      setUserProfile({ id: docSnap.id, ...docSnap.data() });
+      const profileData = { id: docSnap.id, ...docSnap.data() };
+      setUserProfile(profileData);
+      return profileData;
     } else {
       setUserProfile(null);
+      return null;
     }
   }
 
